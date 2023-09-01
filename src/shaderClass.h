@@ -10,7 +10,7 @@
 
 using namespace std;
 
-string get_file_contents(const char* filename);
+//string get_file_contents(const char* filename);
 
 class Shader
 {

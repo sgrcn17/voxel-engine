@@ -2,6 +2,10 @@
 #include <GLFW/glfw3.h>
 
 #include <iostream>
+#include <string>
+#include <fstream>
+#include <sstream>
+#include <cerrno>
 
 const unsigned int SCR_WIDTH = 800;
 const unsigned int SCR_HEIGHT = 600;
@@ -17,6 +21,24 @@ float vertices[] = {
 int init();
 void update();
 void clear();
+
+
+
+std::string get_file_contents(const char* filename)
+{
+	std::ifstream in(filename, std::ios::binary);
+	if (in)
+	{
+		std::string contents;
+		in.seekg(0, std::ios::end);
+		contents.resize(in.tellg());
+		in.seekg(0, std::ios::beg);
+		in.read(&contents[0], contents.size());
+		in.close();
+		return(contents);
+	}
+	throw(errno);
+}
 
 int main()
 {
@@ -69,23 +91,15 @@ int init()
     glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
 
-    const char* vertexShaderSource = "#version 330 core\n"
-        "layout (location = 0) in vec2 aPos;\n"
-        "void main()\n"
-        "{\n"
-        "   gl_Position = vec4(aPos.x, aPos.y, 0.0, 1.0);\n"
-        "}\0";
+    std::string vertexCode = get_file_contents("../src/vertexShader.glsl");
+	const char* vertexShaderSource = vertexCode.c_str();
 
     vertexShader = glCreateShader(GL_VERTEX_SHADER);
     glShaderSource(vertexShader, 1, &vertexShaderSource, NULL);
     glCompileShader(vertexShader);
 
-    const char* fragmentShaderSource = "#version 330 core\n"
-        "out vec4 FragColor;\n"
-        "void main()\n"
-        "{\n"
-        "   FragColor = vec4(1.0, 0.5, 0.2, 1.0);\n"
-        "}\0";
+    std::string fragmentCode = get_file_contents("../src/fragmentShader.glsl");
+    const char* fragmentShaderSource = fragmentCode.c_str();
 
     fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
     glShaderSource(fragmentShader, 1, &fragmentShaderSource, NULL);
