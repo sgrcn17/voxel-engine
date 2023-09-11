@@ -8,8 +8,7 @@
 #include <sstream>
 #include <iostream>
 
-class Shader
-{
+class Shader {
 public:
     Shader(const char* vertexPath, const char* fragmentPath);
     
