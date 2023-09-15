@@ -17,8 +17,8 @@ GLFWwindow* window;
 float vertices[] = {
         -0.5f, -0.5f,
         0.5f, -0.5f,
-        0.5f, 0.5f,
-        -0.5f, 0.5f
+        -0.5f, 0.5f,
+        0.5f, 0.5f
 };
 
 int init();
@@ -85,6 +85,7 @@ void update() {
     glBindVertexArray(VAO);
 
     glDrawArrays(GL_TRIANGLES, 0, 3);
+    glDrawArrays(GL_TRIANGLES, 1, 3);
 
     glfwSwapBuffers(window);
     glfwPollEvents();
