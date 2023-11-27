@@ -1,25 +1,26 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
-
 #include <iostream>
-#include <string>
-#include <fstream>
-#include <sstream>
-#include <cerrno>
+#include "Shader.h"
+#include "VertexBufferObject.h"
+#include "VertexArrayObject.h"
 
-#include "shaderClass.h"
-
-const unsigned int SCR_WIDTH = 800;
-const unsigned int SCR_HEIGHT = 600;
-unsigned int VBO, VAO;
+const unsigned int SCR_WIDTH = 1600;
+const unsigned int SCR_HEIGHT = 900;
 GLFWwindow* window;
 
 float vertices[] = {
-        -0.5f, -0.5f,
-        0.5f, -0.5f,
-        -0.5f, 0.5f,
-        0.5f, 0.5f
+    -0.5f, -0.5f,
+     0.5f, -0.5f,
+    -0.5f,  0.5f,
+    
+     0.5f, -0.5f,
+     0.5f,  0.5f,
+    -0.5f,  0.5f
 };
+
+void framebuffer_size_callback(GLFWwindow* window, int width, int height);
+void processInput(GLFWwindow* window);
 
 int init();
 void update();
@@ -28,16 +29,31 @@ void clear();
 int main() {
     if (init() == -1) return -1;
 
+    Shader shader("../src/vertexShader.glsl", "../src/fragmentShader.glsl");
+
+    VertexBufferObject vbo(vertices, sizeof(vertices));
+    VertexArrayObject vao;
+    
+    vao.AddBuffer(vbo, 0, 2, GL_FLOAT, 2 * sizeof(float), (void*)0);
+
     while (!glfwWindowShouldClose(window)) {
         update();
+
+        glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+        glClear(GL_COLOR_BUFFER_BIT);
+
+        shader.Use();
+        vao.Bind();
+
+        glDrawArrays(GL_TRIANGLES, 0, 6);
+
+        glfwSwapBuffers(window);
+        glfwPollEvents();
     }
 
     clear();
     return 0;
 }
-
-void framebuffer_size_callback(GLFWwindow* window, int width, int height);
-void processInput(GLFWwindow* window);
 
 int init() {
     glfwInit();
@@ -52,6 +68,7 @@ int init() {
         return -1;
     }
     glfwMakeContextCurrent(window);
+
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
@@ -59,42 +76,14 @@ int init() {
         return -1;
     }
 
-    glGenVertexArrays(1, &VAO);
-    glGenBuffers(1, &VBO);
-
-    glBindVertexArray(VAO);
-
-    glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-
-    glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), (void*)0);
-    glEnableVertexAttribArray(0);
-
     return 0;
 }
 
 void update() {
     processInput(window);
-
-    glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-    glClear(GL_COLOR_BUFFER_BIT);
-
-    Shader shader("../src/vertexShader.glsl", "../src/fragmentShader.glsl");
-    shader.Use();
-
-    glBindVertexArray(VAO);
-
-    glDrawArrays(GL_TRIANGLES, 0, 3);
-    glDrawArrays(GL_TRIANGLES, 1, 3);
-
-    glfwSwapBuffers(window);
-    glfwPollEvents();
 }
 
 void clear() {
-    glDeleteVertexArrays(1, &VAO);
-    glDeleteBuffers(1, &VBO);
-
     glfwTerminate();
 }
 

@@ -1,0 +1,23 @@
+#include "IndexBufferObject.h"
+
+IndexBufferObject::IndexBufferObject(const GLuint* data, GLsizei count) : count(count) {
+    glGenBuffers(1, &ID);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ID);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, count * sizeof(GLuint), data, GL_STATIC_DRAW);
+}
+
+IndexBufferObject::~IndexBufferObject() {
+    glDeleteBuffers(1, &ID);
+}
+
+void IndexBufferObject::Bind() const {
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ID);
+}
+
+void IndexBufferObject::Unbind() const {
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+}
+
+GLsizei IndexBufferObject::GetCount() const {
+    return count;
+}
