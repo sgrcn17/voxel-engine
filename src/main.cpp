@@ -7,97 +7,31 @@
 #include <glm/glm.hpp>
 #include <glm/ext.hpp>
 #include <iostream>
-#include "Shader.h"
+#include "shader.hpp"
+#include "vbo.hpp"
+#include "vao.hpp"
+#include "ebo.hpp"
 
 const unsigned int SCR_WIDTH = 1600;
 const unsigned int SCR_HEIGHT = 900;
 GLFWwindow* window;
 
-float vertices[] = {
-    -0.5f, -0.5f,
-     0.5f, -0.5f,
-    -0.5f,  0.5f,
-     0.5f,  0.5f
+GLuint indices[] = {
+        0, 1, 2
 };
 
-unsigned int indices[] = {
-    0, 1, 2,
-    1, 3, 2
+GLfloat vertices[] = {
+    -0.5f, -0.5f, 0.0f,
+     0.5f, -0.5f, 0.0f,
+    -0.5f,  0.5f, 0.0f
 };
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void processInput(GLFWwindow* window);
 
-int init();
-void update();
-void clear();
-
-unsigned int vao, vbo, ebo;
+unsigned int vao, ebo;
 
 int main() {
-    if (init() == -1) return -1;
-
-    Shader shader("../src/vertexShader.glsl", "../src/fragmentShader.glsl");
-
-    while (!glfwWindowShouldClose(window)) {
-        update();
-
-        glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT);
-
-        ImGui_ImplOpenGL3_NewFrame();
-        ImGui_ImplGlfw_NewFrame();
-        ImGui::NewFrame();
-
-        shader.Use();
-        glBindVertexArray(vao);
-        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-
-        ImGui::Begin("My name is window, ImGUI window");
-        ImGui::Text("Hello there!");
-        ImGui::End();
-
-        ImGui::Render();
-        ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-
-        glfwSwapBuffers(window);
-        glfwPollEvents();
-    }
-
-    clear();
-    return 0;
-}
-
-void InitImGui() {
-    IMGUI_CHECKVERSION();
-    ImGui::CreateContext();
-    ImGuiIO& io = ImGui::GetIO(); (void)io;
-    ImGui::StyleColorsDark();
-    ImGui_ImplGlfw_InitForOpenGL(window, true);
-    ImGui_ImplOpenGL3_Init("#version 330");
-}
-
-void InitBuffers() {
-    glGenVertexArrays(1, &vao);
-    glGenBuffers(1, &vbo);
-    glGenBuffers(1, &ebo);
-
-    glBindVertexArray(vao);
-
-    glBindBuffer(GL_ARRAY_BUFFER, vbo);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-    
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
-
-    glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 2*sizeof(float), (void*)0);
-    glEnableVertexAttribArray(0);
-
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
-    glBindVertexArray(0);
-}
-
-int init() {
     glfwInit();
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
@@ -109,35 +43,46 @@ int init() {
         glfwTerminate();
         return -1;
     }
-    glfwMakeContextCurrent(window);
+   
+   glfwMakeContextCurrent(window);
+   gladLoadGL();
+   glViewport(0, 0, SCR_WIDTH, SCR_HEIGHT);
 
-    glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
+    Shader shaderProgram("../src/vertexShader.glsl", "../src/fragmentShader.glsl");
 
-    if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
-        std::cout << "Failed to initialize GLAD" << std::endl;
-        return -1;
+    VAO vao;
+    vao.Bind();
+
+    VBO vbo(vertices, sizeof(vertices));
+    EBO ebo(indices, sizeof(indices));
+
+    vao.LinkVBO(vbo, 0);
+    vao.Unbind();
+    vbo.Unbind();
+    ebo.Unbind();
+
+    while (!glfwWindowShouldClose(window)) {
+        processInput(window);
+
+        glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+        glClear(GL_COLOR_BUFFER_BIT);
+
+        shaderProgram.Activate();
+        vao.Bind();
+        glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, 0);
+
+        glfwSwapBuffers(window);
+        glfwPollEvents();
     }
+    vao.Delete();
+    vbo.Delete();
+    ebo.Delete();
+    shaderProgram.Delete();
 
-    InitBuffers();
-    InitImGui();
+    glfwDestroyWindow(window);
+    glfwTerminate();
 
     return 0;
-}
-
-void update() {
-    processInput(window);
-}
-
-void clear() {
-    glDeleteVertexArrays(1, &vao);
-    glDeleteBuffers(1, &vbo);
-    glDeleteBuffers(1, &ebo);
-
-    ImGui_ImplOpenGL3_Shutdown();
-    ImGui_ImplGlfw_Shutdown();
-    ImGui::DestroyContext();
-
-    glfwTerminate();
 }
 
 void processInput(GLFWwindow* window) {
