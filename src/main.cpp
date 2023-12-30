@@ -32,14 +32,14 @@ GLuint indices[] = {
 
 //      coordinates       //        color       //      texture coords
 GLfloat vertices[] = {
-    -0.5f, -0.5f, -0.5f,     1.0f, 0.0f, 0.0f,   0.0f, 0.0f,
-     0.5f, -0.5f, -0.5f,     0.0f, 1.0f, 0.0f,   1.0f, 0.0f,
-    -0.5f, -0.5f, 0.5f,     0.0f, 0.0f, 1.0f,   0.0f, 1.0f,
-     0.5f, -0.5f, 0.5f,     1.0f, 1.0f, 1.0f,    1.0f, 1.0f,
-     -0.5f, 0.5f, -0.5f,     1.0f, 0.0f, 0.0f,   1.0f, 0.0f,
-     0.5f, 0.5f, -0.5f,     0.0f, 1.0f, 0.0f,   1.0f, 1.0f,
-    -0.5f, 0.5f, 0.5f,     0.0f, 0.0f, 1.0f,   0.0f, 0.0f,
-     0.5f, 0.5f, 0.5f,     1.0f, 1.0f, 1.0f,    0.0f, 1.0f
+    -0.5f, -0.5f, -0.5f,   1.0f, 0.0f, 0.0f,   0.0f, 0.0f,
+     0.5f, -0.5f, -0.5f,   0.0f, 1.0f, 0.0f,   1.0f, 0.0f,
+    -0.5f, -0.5f,  0.5f,   0.0f, 0.0f, 1.0f,   0.0f, 1.0f,
+     0.5f, -0.5f,  0.5f,   1.0f, 1.0f, 1.0f,   1.0f, 1.0f,
+    -0.5f,  0.5f, -0.5f,   1.0f, 0.0f, 0.0f,   1.0f, 0.0f,
+     0.5f,  0.5f, -0.5f,   0.0f, 1.0f, 0.0f,   1.0f, 1.0f,
+    -0.5f,  0.5f,  0.5f,   0.0f, 0.0f, 1.0f,   0.0f, 0.0f,
+     0.5f,  0.5f,  0.5f,   1.0f, 1.0f, 1.0f,   0.0f, 1.0f
 };
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
@@ -59,10 +59,10 @@ int main() {
         glfwTerminate();
         return -1;
     }
-   
-   glfwMakeContextCurrent(window);
-   gladLoadGL();
-   glViewport(0, 0, SCR_WIDTH, SCR_HEIGHT);
+    
+    glfwMakeContextCurrent(window);
+    gladLoadGL();
+    glViewport(0, 0, SCR_WIDTH, SCR_HEIGHT);
 
     Shader shaderProgram("../src/shaders/vertexShader.glsl", "../src/shaders/fragmentShader.glsl");
 

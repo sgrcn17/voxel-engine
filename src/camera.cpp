@@ -32,7 +32,36 @@ void Camera::Input(GLFWwindow* window) {
     if(glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS) {
         position += speed * up;
     }
-    if(glfwGetKey(window, GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS) {
+    if(glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS) {
         position += speed * -up;
+    }
+
+    if(glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS) {
+        glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
+
+        if(firstClick) {
+            glfwSetCursorPos(window, (screenWidth/2), (screenHeight/2));
+            firstClick = false;
+        }
+
+        double mouseX;
+        double mouseY;
+        glfwGetCursorPos(window, &mouseX, &mouseY);
+
+        float rotX = sensitivity * (float)(mouseY - (screenHeight / 2)) / screenHeight;
+        float rotY = sensitivity * (float)(mouseX - (screenWidth / 2)) / screenWidth;
+
+        glm::vec3 newOrientation = glm::rotate(orientation, glm::radians(-rotX), glm::normalize(glm::cross(orientation, up)));
+
+        if(!(glm::angle(newOrientation, up) <= glm::radians(5.0f) || glm::angle(newOrientation, up) <= glm::radians(5.0f))) {
+            orientation = newOrientation;
+        }
+
+        orientation = glm::rotate(orientation, glm::radians(-rotY), up);
+    
+        glfwSetCursorPos(window, (screenWidth/2), (screenHeight/2));
+    } else if(glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_RELEASE) {
+            glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+            firstClick = true;
     }
 }
