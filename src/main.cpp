@@ -10,37 +10,11 @@
 #include "stb/stb_image.hpp"
 #include "texture.hpp"
 #include "camera.hpp"
+#include "chunk.hpp"
 
 const unsigned int SCR_WIDTH = 1600;
 const unsigned int SCR_HEIGHT = 1600;
 GLFWwindow* window;
-
-GLuint indices[] = {
-        0, 2, 3, //bottom
-        1, 0, 3,
-        0, 4, 5, //front
-        1, 0, 5,
-        2, 6, 4, //left
-        0, 2, 4,
-        1, 5, 7, //right
-        3, 1, 7,
-        3, 7, 6, //back
-        2, 3, 6,
-        4, 6, 7, //top
-        5, 4, 7
-};
-
-//      coordinates       //        color       //      texture coords
-GLfloat vertices[] = {
-    -0.5f, -0.5f, -0.5f,   1.0f, 0.0f, 0.0f,   0.0f, 0.0f,
-     0.5f, -0.5f, -0.5f,   0.0f, 1.0f, 0.0f,   1.0f, 0.0f,
-    -0.5f, -0.5f,  0.5f,   0.0f, 0.0f, 1.0f,   0.0f, 1.0f,
-     0.5f, -0.5f,  0.5f,   1.0f, 1.0f, 1.0f,   1.0f, 1.0f,
-    -0.5f,  0.5f, -0.5f,   1.0f, 0.0f, 0.0f,   1.0f, 0.0f,
-     0.5f,  0.5f, -0.5f,   0.0f, 1.0f, 0.0f,   1.0f, 1.0f,
-    -0.5f,  0.5f,  0.5f,   0.0f, 0.0f, 1.0f,   0.0f, 0.0f,
-     0.5f,  0.5f,  0.5f,   1.0f, 1.0f, 1.0f,   0.0f, 1.0f
-};
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void processInput(GLFWwindow* window);
@@ -66,19 +40,15 @@ int main() {
 
     Shader shaderProgram("../src/shaders/vertexShader.glsl", "../src/shaders/fragmentShader.glsl");
 
-    VAO vao;
-    vao.Bind();
-
-    VBO vbo(vertices, sizeof(vertices));
-    EBO ebo(indices, sizeof(indices));
-
-    vao.LinkAttrib(vbo, 0, 3, GL_FLOAT, 8*sizeof(float), (void*)0);
-    vao.LinkAttrib(vbo, 1, 3, GL_FLOAT, 8*sizeof(float), (void*)(3*sizeof(float)));
-    vao.LinkAttrib(vbo, 2, 2, GL_FLOAT, 8*sizeof(float), (void*)(6*sizeof(float)));
-    
-    vao.Unbind();
-    vbo.Unbind();
-    ebo.Unbind();
+    Chunk chunk(0, 0, 0, shaderProgram);
+    Chunk chunk1(16, 0, 0, shaderProgram);
+    Chunk chunk2(32, 0, 0, shaderProgram);
+    Chunk chunk3(48, 0, 0, shaderProgram);
+    Chunk chunk4(64, 0, 0, shaderProgram);
+    Chunk chunk5(80, 0, 0, shaderProgram);
+    Chunk chunk6(96, 0, 0, shaderProgram);
+    Chunk chunk7(112, 0, 0, shaderProgram);
+    Chunk chunk8(128, 0, 0, shaderProgram);
 
     Texture dirt("../src/textures/dirt.png", GL_TEXTURE_2D, GL_TEXTURE0, GL_RGBA, GL_UNSIGNED_BYTE);
     dirt.texUnit(shaderProgram, "tex0", 0);
@@ -86,6 +56,7 @@ int main() {
     glEnable(GL_DEPTH_TEST);
 
     Camera camera(SCR_WIDTH, SCR_HEIGHT, glm::vec3(0.0f, 0.0f, 2.0f));
+
 
     while (!glfwWindowShouldClose(window)) {
         processInput(window);
@@ -96,17 +67,24 @@ int main() {
         shaderProgram.Activate();
 
         camera.Input(window);
-        camera.Matrix(45.0f, 0.1f, 100.0f, shaderProgram, "camMatrix");
+        camera.Matrix(45.0f, 0.1f, 400.0f, shaderProgram, "camMatrix");
 
         dirt.Bind();
 
-        vao.Bind();
-
-        glDrawElements(GL_TRIANGLES, sizeof(indices)/sizeof(int), GL_UNSIGNED_INT, 0);
+        chunk.Draw();
+        chunk1.Draw();
+        chunk2.Draw();
+        chunk3.Draw();
+        chunk4.Draw();
+        chunk5.Draw();
+        chunk6.Draw();
+        chunk7.Draw();
+        chunk8.Draw();
 
         glfwSwapBuffers(window);
         glfwPollEvents();
     }
+        
     vao.Delete();
     vbo.Delete();
     ebo.Delete();
