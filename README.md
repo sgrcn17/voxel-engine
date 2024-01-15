@@ -1,6 +1,6 @@
 # voxel-engine
 
-A simple Minecraft-inspired game project to learn OpenGL and c++ better.
+A simple Minecraft-inspired game project to learn OpenGL and c++ better. (Not yet finished)
 
 ## Technology Stack
 
@@ -8,3 +8,4 @@ A simple Minecraft-inspired game project to learn OpenGL and c++ better.
 - **glad** *-* easier access to opengl functions 
 - **glm** *-* math library for matrices transformations 
 - **imgui** *-* debug gui 
+- **stb_image** *-* loading textures
