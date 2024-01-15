@@ -1,11 +1,11 @@
 #ifndef CHUNK_HPP
 #define CHUNK_HPP
 
-#include "shader.hpp"
-#include "vao.hpp"
-#include "vbo.hpp"
-#include "ebo.hpp"
-#include "block.hpp"
+#include "../render/shader.hpp"
+#include "../render/vao.hpp"
+#include "../render/vbo.hpp"
+#include "../render/ebo.hpp"
+#include "../core/block.hpp"
 #include <vector>
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>

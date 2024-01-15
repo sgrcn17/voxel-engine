@@ -3,14 +3,14 @@
 #include <glm/glm.hpp>
 #include <glm/ext.hpp>
 #include <iostream>
-#include "shader.hpp"
-#include "vbo.hpp"
-#include "vao.hpp"
-#include "ebo.hpp"
+#include "render/shader.hpp"
+#include "render/vbo.hpp"
+#include "render/vao.hpp"
+#include "render/ebo.hpp"
 #include "stb/stb_image.hpp"
-#include "texture.hpp"
-#include "camera.hpp"
-#include "chunk.hpp"
+#include "render/texture.hpp"
+#include "core/camera.hpp"
+#include "core/chunk.hpp"
 
 const unsigned int SCR_WIDTH = 1600;
 const unsigned int SCR_HEIGHT = 1600;
@@ -18,8 +18,6 @@ GLFWwindow* window;
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void processInput(GLFWwindow* window);
-
-unsigned int vao, ebo;
 
 int main() {
     glfwInit();
@@ -38,7 +36,7 @@ int main() {
     gladLoadGL();
     glViewport(0, 0, SCR_WIDTH, SCR_HEIGHT);
 
-    Shader shaderProgram("../src/shaders/vertexShader.glsl", "../src/shaders/fragmentShader.glsl");
+    Shader shaderProgram("../resources/shaders/vertexShader.glsl", "../resources/shaders/fragmentShader.glsl");
 
     Chunk chunk(0, 0, 0, shaderProgram);
     Chunk chunk1(16, 0, 0, shaderProgram);
@@ -50,7 +48,7 @@ int main() {
     Chunk chunk7(112, 0, 0, shaderProgram);
     Chunk chunk8(128, 0, 0, shaderProgram);
 
-    Texture dirt("../src/textures/dirt.png", GL_TEXTURE_2D, GL_TEXTURE0, GL_RGBA, GL_UNSIGNED_BYTE);
+    Texture dirt("../resources/textures/dirt.png", GL_TEXTURE_2D, GL_TEXTURE0, GL_RGBA, GL_UNSIGNED_BYTE);
     dirt.texUnit(shaderProgram, "tex0", 0);
 
     glEnable(GL_DEPTH_TEST);
@@ -85,9 +83,6 @@ int main() {
         glfwPollEvents();
     }
         
-    vao.Delete();
-    vbo.Delete();
-    ebo.Delete();
     dirt.Delete();
     shaderProgram.Delete();
 
