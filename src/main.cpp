@@ -39,14 +39,6 @@ int main() {
     Shader shaderProgram("../resources/shaders/vertexShader.glsl", "../resources/shaders/fragmentShader.glsl");
 
     Chunk chunk(0, 0, 0, shaderProgram);
-    Chunk chunk1(16, 0, 0, shaderProgram);
-    Chunk chunk2(32, 0, 0, shaderProgram);
-    Chunk chunk3(48, 0, 0, shaderProgram);
-    Chunk chunk4(64, 0, 0, shaderProgram);
-    Chunk chunk5(80, 0, 0, shaderProgram);
-    Chunk chunk6(96, 0, 0, shaderProgram);
-    Chunk chunk7(112, 0, 0, shaderProgram);
-    Chunk chunk8(128, 0, 0, shaderProgram);
 
     Texture dirt("../resources/textures/dirt.png", GL_TEXTURE_2D, GL_TEXTURE0, GL_RGBA, GL_UNSIGNED_BYTE);
     dirt.texUnit(shaderProgram, "tex0", 0);
@@ -70,14 +62,6 @@ int main() {
         dirt.Bind();
 
         chunk.Draw();
-        chunk1.Draw();
-        chunk2.Draw();
-        chunk3.Draw();
-        chunk4.Draw();
-        chunk5.Draw();
-        chunk6.Draw();
-        chunk7.Draw();
-        chunk8.Draw();
 
         glfwSwapBuffers(window);
         glfwPollEvents();
