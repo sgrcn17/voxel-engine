@@ -1,86 +1,8 @@
-#include <glad/glad.h>
-#include <GLFW/glfw3.h>
-#include <glm/glm.hpp>
-#include <glm/ext.hpp>
-#include <iostream>
-#include "render/shader.hpp"
-#include "render/vbo.hpp"
-#include "render/vao.hpp"
-#include "render/ebo.hpp"
-#include "stb/stb_image.hpp"
-#include "render/texture.hpp"
-#include "core/camera.hpp"
-#include "core/chunk.hpp"
-
-const unsigned int SCR_WIDTH = 1600;
-const unsigned int SCR_HEIGHT = 1600;
-GLFWwindow* window;
-
-void framebuffer_size_callback(GLFWwindow* window, int width, int height);
-void processInput(GLFWwindow* window);
+#include "core/game.hpp"
 
 int main() {
-    glfwInit();
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-
-    window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "LearnOpenGL", NULL, NULL);
-    if (window == NULL) {
-        std::cout << "Failed to create GLFW window" << std::endl;
-        glfwTerminate();
-        return -1;
-    }
-    
-    glfwMakeContextCurrent(window);
-    gladLoadGL();
-    glViewport(0, 0, SCR_WIDTH, SCR_HEIGHT);
-
-    Shader shaderProgram("../resources/shaders/vertexShader.glsl", "../resources/shaders/fragmentShader.glsl");
-
-    Chunk chunk(0, 0, 0, shaderProgram);
-
-    Texture dirt("../resources/textures/dirt.png", GL_TEXTURE_2D, GL_TEXTURE0, GL_RGBA, GL_UNSIGNED_BYTE);
-    dirt.texUnit(shaderProgram, "tex0", 0);
-
-    glEnable(GL_DEPTH_TEST);
-
-    Camera camera(SCR_WIDTH, SCR_HEIGHT, glm::vec3(0.0f, 0.0f, 2.0f));
-
-
-    while (!glfwWindowShouldClose(window)) {
-        processInput(window);
-
-        glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-        shaderProgram.Activate();
-
-        camera.Input(window);
-        camera.Matrix(45.0f, 0.1f, 400.0f, shaderProgram, "camMatrix");
-
-        dirt.Bind();
-
-        chunk.Draw();
-
-        glfwSwapBuffers(window);
-        glfwPollEvents();
-    }
-        
-    dirt.Delete();
-    shaderProgram.Delete();
-
-    glfwDestroyWindow(window);
-    glfwTerminate();
+    Game game;
+    game.Run();
 
     return 0;
-}
-
-void processInput(GLFWwindow* window) {
-    if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
-        glfwSetWindowShouldClose(window, true);
-}
-
-void framebuffer_size_callback(GLFWwindow* window, int width, int height) {
-    glViewport(0, 0, width, height);
 }

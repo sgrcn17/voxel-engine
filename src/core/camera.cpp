@@ -61,7 +61,7 @@ void Camera::Input(GLFWwindow* window) {
     
         glfwSetCursorPos(window, (screenWidth/2), (screenHeight/2));
     } else if(glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_RELEASE) {
-            glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
-            firstClick = true;
+        glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+        firstClick = true;
     }
 }

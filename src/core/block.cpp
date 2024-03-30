@@ -2,20 +2,19 @@
 
 Block::Block(int x, int y, int z) : x(x), y(y), z(z) {}
 
-void Block::addVerticesAndIndices(std::vector<float>& vertices, std::vector<unsigned int>& indices) {
-    // Wierzchołki dla bloku na pozycji (x, y, z)
-    GLfloat blockVertices[] = {
+void Block::addVerticesAndIndices(std::vector<float>& vertices, std::vector<unsigned int>& indices, int block_id) {
+    
+    GLfloat blockVertices[] = { //1.0f-0.03125f
         x-0.5f, y-0.5f, z-0.5f,   1.0f, 0.0f, 0.0f,   0.0f, 0.0f,
-        x+0.5f, y-0.5f, z-0.5f,   0.0f, 1.0f, 0.0f,   1.0f, 0.0f,
-        x-0.5f, y-0.5f, z+0.5f,   0.0f, 0.0f, 1.0f,   0.0f, 1.0f,
-        x+0.5f, y-0.5f, z+0.5f,   1.0f, 1.0f, 1.0f,   1.0f, 1.0f,
-        x-0.5f, y+0.5f, z-0.5f,   1.0f, 0.0f, 0.0f,   1.0f, 0.0f,
-        x+0.5f, y+0.5f, z-0.5f,   0.0f, 1.0f, 0.0f,   1.0f, 1.0f,
+        x+0.5f, y-0.5f, z-0.5f,   0.0f, 1.0f, 0.0f,   0.03125f, 0.0f,
+        x-0.5f, y-0.5f, z+0.5f,   0.0f, 0.0f, 1.0f,   0.0f, 0.03125f,
+        x+0.5f, y-0.5f, z+0.5f,   1.0f, 1.0f, 1.0f,   0.03125f, 0.03125f,
+        x-0.5f, y+0.5f, z-0.5f,   1.0f, 0.0f, 0.0f,   0.03125f, 0.0f,
+        x+0.5f, y+0.5f, z-0.5f,   0.0f, 1.0f, 0.0f,   0.03125f, 0.03125f,
         x-0.5f, y+0.5f, z+0.5f,   0.0f, 0.0f, 1.0f,   0.0f, 0.0f,
-        x+0.5f, y+0.5f, z+0.5f,   1.0f, 1.0f, 1.0f,   0.0f, 1.0f
+        x+0.5f, y+0.5f, z+0.5f,   1.0f, 1.0f, 1.0f,   0.0f, 0.03125f
     };
 
-    // Indeksy dla bloku
     GLuint blockIndices[] = {
         0, 2, 3, //bottom
         1, 0, 3,
@@ -30,6 +29,13 @@ void Block::addVerticesAndIndices(std::vector<float>& vertices, std::vector<unsi
         4, 6, 7, //top
         5, 4, 7
     };
+
+    auto [x, y] = DataLoader::GetInstance()->GetBlockData(block_id);
+
+    for (int i = 0 ; i < sizeof(blockVertices) / sizeof(float) ; i+=8) {
+            blockVertices[i+6] += x;
+            blockVertices[i+7] += y;
+        }
 
     for (int i = 0 ; i < sizeof(blockIndices) / sizeof(unsigned int) ; i++) {
         blockIndices[i] += vertices.size() / 8;

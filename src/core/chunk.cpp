@@ -18,7 +18,7 @@ Chunk::Chunk(int x, int y, int z, const Shader& shaderProgram)
     for (int i = 0; i < CHUNK_SIZE; ++i) {
         for (int j = 0; j < CHUNK_SIZE; ++j) {
             for (int k = 0; k < CHUNK_SIZE; ++k) {
-                blocks[i][j][k].addVerticesAndIndices(vertices, indices);
+                blocks[i][j][k].addVerticesAndIndices(vertices, indices, 0);
             }
         }
     }

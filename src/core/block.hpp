@@ -4,12 +4,13 @@
 #include <vector>
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
+#include "../utils/DataLoader.hpp"
 
 class Block {
 public:
     Block() : x(0), y(0), z(0) {}
     Block(int x, int y, int z);
-    void addVerticesAndIndices(std::vector<float>& vertices, std::vector<unsigned int>& indices);
+    void addVerticesAndIndices(std::vector<float>& vertices, std::vector<unsigned int>& indices, int block_id);
 
 private:
     int x, y, z;
