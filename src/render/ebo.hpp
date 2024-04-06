@@ -9,6 +9,7 @@ public:
     EBO(GLuint* indices, GLsizeiptr size);
     void Bind();
     void Unbind();
+    void Update(GLuint* indices, GLsizeiptr size);
     void Delete();
 
 private:
