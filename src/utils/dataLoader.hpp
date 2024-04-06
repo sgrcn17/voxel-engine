@@ -5,6 +5,7 @@
 #include <fstream>
 
 #include "../include/nlohmann/json.hpp"
+#include "blockData.hpp"
 
 using json = nlohmann::json;
 
@@ -18,11 +19,11 @@ public:
 
     void LoadBlockData();
 
-    std::pair<float,float> GetBlockData(int block_id);
+    BlockData* GetBlockData(int block_id);
 
 protected:
     DataLoader() { }
     static DataLoader* instance;
 
-    std::map<int, std::pair<float,float>> blockData;
+    std::map<int, BlockData*> blocksData;
 };

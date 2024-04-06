@@ -1,4 +1,4 @@
-#include "DataLoader.hpp"
+#include "dataLoader.hpp"
 
 DataLoader* DataLoader::instance = nullptr;
 
@@ -10,8 +10,8 @@ DataLoader* DataLoader::GetInstance() {
     return instance;
 }
 
-std::pair<float,float> DataLoader::GetBlockData(int block_id) {
-        return (blockData.count(block_id)) ? blockData[block_id] : blockData[0];
+BlockData* DataLoader::GetBlockData(int block_id) {
+        return (blocksData.count(block_id)) ? blocksData[block_id] : blocksData[0];
 }
 
 void DataLoader::LoadBlockData() {
@@ -21,6 +21,7 @@ void DataLoader::LoadBlockData() {
     for (auto& block : block_data) {
         float x = (float)block["x"] / 32.0f;
         float y = (float)block["y"] / 32.0f;
-        blockData[block["id"]] = std::make_pair(x, y);
+        
+        blocksData[block["id"]] = new BlockData(x, y);
     }
 }
