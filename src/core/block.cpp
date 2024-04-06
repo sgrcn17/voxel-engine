@@ -1,18 +1,17 @@
 #include "block.hpp"
 
-Block::Block(int x, int y, int z) : x(x), y(y), z(z) {}
+void Block::addVerticesAndIndices(std::vector<float>& vertices, std::vector<unsigned int>& indices) {
+    if(id == 0) return;
 
-void Block::addVerticesAndIndices(std::vector<float>& vertices, std::vector<unsigned int>& indices, int block_id) {
-    
-    GLfloat blockVertices[] = { //1.0f-0.03125f
-        x-0.5f, y-0.5f, z-0.5f,   1.0f, 0.0f, 0.0f,   0.0f, 0.0f,
-        x+0.5f, y-0.5f, z-0.5f,   0.0f, 1.0f, 0.0f,   0.03125f, 0.0f,
-        x-0.5f, y-0.5f, z+0.5f,   0.0f, 0.0f, 1.0f,   0.0f, 0.03125f,
-        x+0.5f, y-0.5f, z+0.5f,   1.0f, 1.0f, 1.0f,   0.03125f, 0.03125f,
-        x-0.5f, y+0.5f, z-0.5f,   1.0f, 0.0f, 0.0f,   0.03125f, 0.0f,
-        x+0.5f, y+0.5f, z-0.5f,   0.0f, 1.0f, 0.0f,   0.03125f, 0.03125f,
-        x-0.5f, y+0.5f, z+0.5f,   0.0f, 0.0f, 1.0f,   0.0f, 0.0f,
-        x+0.5f, y+0.5f, z+0.5f,   1.0f, 1.0f, 1.0f,   0.0f, 0.03125f
+    GLfloat blockVertices[] = {
+        -0.5f, -0.5f, -0.5f,   1.0f, 0.0f, 0.0f,   0.0f, 0.0f,
+        +0.5f, -0.5f, -0.5f,   0.0f, 1.0f, 0.0f,   0.03125f, 0.0f,
+        -0.5f, -0.5f, +0.5f,   0.0f, 0.0f, 1.0f,   0.0f, 0.03125f,
+        +0.5f, -0.5f, +0.5f,   1.0f, 1.0f, 1.0f,   0.03125f, 0.03125f,
+        -0.5f, +0.5f, -0.5f,   1.0f, 0.0f, 0.0f,   0.03125f, 0.0f,
+        +0.5f, +0.5f, -0.5f,   0.0f, 1.0f, 0.0f,   0.03125f, 0.03125f,
+        -0.5f, +0.5f, +0.5f,   0.0f, 0.0f, 1.0f,   0.0f, 0.0f,
+        +0.5f, +0.5f, +0.5f,   1.0f, 1.0f, 1.0f,   0.0f, 0.03125f
     };
 
     GLuint blockIndices[] = {
@@ -30,18 +29,23 @@ void Block::addVerticesAndIndices(std::vector<float>& vertices, std::vector<unsi
         5, 4, 7
     };
 
-    auto [x, y] = DataLoader::GetInstance()->GetBlockData(block_id);
+    auto blockData = DataLoader::GetInstance()->GetBlockData(id);
+    auto textureX = blockData->textureX;
+    auto textureY = blockData->textureY;
 
     for (int i = 0 ; i < sizeof(blockVertices) / sizeof(float) ; i+=8) {
-            blockVertices[i+6] += x;
-            blockVertices[i+7] += y;
+            blockVertices[i] += x;
+            blockVertices[i+1] += y;
+            blockVertices[i+2] += z;
+
+            blockVertices[i+6] += textureX;
+            blockVertices[i+7] += textureY;
         }
 
     for (int i = 0 ; i < sizeof(blockIndices) / sizeof(unsigned int) ; i++) {
         blockIndices[i] += vertices.size() / 8;
     }
 
-    // Dodawanie wierzchołków i indeksów do vectorsów
     vertices.insert(vertices.end(), blockVertices, blockVertices + sizeof(blockVertices) / sizeof(float));
     indices.insert(indices.end(), blockIndices, blockIndices + sizeof(blockIndices) / sizeof(unsigned int));
 }

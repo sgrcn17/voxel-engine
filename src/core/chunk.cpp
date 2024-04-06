@@ -4,21 +4,14 @@ Chunk::Chunk(int x, int y, int z, const Shader& shaderProgram)
     : x(x), y(y), z(z), shaderProgram(shaderProgram), 
       vbo(nullptr, 0), ebo(nullptr, 0)
 {
-    for (int i = 0; i < CHUNK_SIZE; ++i) {
-        for (int j = 0; j < CHUNK_SIZE; ++j) {
-            for (int k = 0; k < CHUNK_SIZE; ++k) {
-                blocks[i][j][k] = Block(i + x, j + y, k + z);
-            }
-        }
-    }
-
     std::vector<float> vertices;
     std::vector<unsigned int> indices;
 
-    for (int i = 0; i < CHUNK_SIZE; ++i) {
-        for (int j = 0; j < CHUNK_SIZE; ++j) {
-            for (int k = 0; k < CHUNK_SIZE; ++k) {
-                blocks[i][j][k].addVerticesAndIndices(vertices, indices, 0);
+    for (int i = 0; i < CHUNK_SIZE_X; ++i) {
+        for (int j = 0; j < CHUNK_SIZE_Y; ++j) {
+            for (int k = 0; k < CHUNK_SIZE_Z; ++k) {
+                blocks[i][j][k] = Block(i+x, j+y, k+z, (j > 40) ? 0 : 1);
+                blocks[i][j][k].addVerticesAndIndices(vertices, indices);
             }
         }
     }
@@ -34,6 +27,33 @@ Chunk::Chunk(int x, int y, int z, const Shader& shaderProgram)
     vao.Unbind();
     vbo.Unbind();
     ebo.Unbind();
+}
+
+void Chunk::UpdateMesh() {
+    std::vector<float> vertices;
+    std::vector<unsigned int> indices;
+
+    for (int i = 0; i < CHUNK_SIZE_X; ++i) {
+        for (int j = 0; j < CHUNK_SIZE_Y; ++j) {
+            for (int k = 0; k < CHUNK_SIZE_Z; ++k) {
+                blocks[i][j][k].addVerticesAndIndices(vertices, indices);
+            }
+        }
+    }
+
+    vao.Bind();
+    vbo.Update(vertices.data(), vertices.size() * sizeof(float));
+    ebo.Update(indices.data(), indices.size() * sizeof(unsigned int));
+    indexCount = indices.size();
+    vao.Unbind();
+    vbo.Unbind();
+    ebo.Unbind();
+
+}
+
+void Chunk::RemoveBlock(int x, int y, int z) {
+    blocks[x][y][z] = Block(x, y, z, 0);
+    UpdateMesh();
 }
 
 void Chunk::Draw() {
