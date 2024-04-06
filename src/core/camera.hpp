@@ -22,7 +22,7 @@ public:
     int screenWidth;
     int screenHeight;
 
-    float speed = 0.06f;
+    float speed = 0.006f;
     float sensitivity = 70.0f;
 
     Camera(int scrWidth, int scrHeight, glm::vec3 position);
