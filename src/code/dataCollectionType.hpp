@@ -11,6 +11,8 @@ class DataCollectionType {
     virtual void LoadData(const json& data) = 0;
     virtual void SaveData(json& data) const = 0;
 
+    virtual int GetID() const = 0;
+
 protected:
     unsigned int id;
 };

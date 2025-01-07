@@ -1,0 +1,26 @@
+[
+    {
+        "id": 0,
+        "name": "air",
+        "textures": {
+            "bottom": 0,
+            "east": 0,
+            "north": 0,
+            "south": 0,
+            "top": 0,
+            "west": 0
+        }
+    },
+    {
+        "id": 1,
+        "name": "dirt",
+        "textures": {
+            "bottom": 1,
+            "east": 1,
+            "north": 1,
+            "south": 1,
+            "top": 1,
+            "west": 1
+        }
+    }
+]

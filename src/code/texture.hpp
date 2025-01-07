@@ -8,15 +8,19 @@ class Texture : DataCollectionType {
     int xPos, yPos;
     std::string name;
 
+    int GetID() const override {
+        return DataCollectionType::id;
+    }
+
     void LoadData(const json& data) override {
-        id = data["id"];
+        DataCollectionType::id = data["id"];
         xPos = data["position"]["x"];
         yPos = data["position"]["y"];
         name = data["name"];
     }
 
     void SaveData(json& data) const override {
-        data["id"] = id;
+        data["id"] = DataCollectionType::id;
         data["position"]["x"] = xPos;
         data["position"]["y"] = yPos;
         data["name"] = name;

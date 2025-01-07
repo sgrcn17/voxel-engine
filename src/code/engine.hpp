@@ -23,6 +23,7 @@
 #include "window.hpp"
 #include "input.hpp"
 #include "renderer.hpp"
+#include "model.hpp"
 
 class Engine {
 
@@ -48,4 +49,5 @@ private:
     static Interface* interface;
     static Camera* camera;
     static DataCollection<Texture>* textureAtlas;
+    static DataCollection<Model>* blockModels;
 };

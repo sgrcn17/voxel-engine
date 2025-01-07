@@ -6,19 +6,24 @@
 #include "imgui/imgui_impl_opengl3.h"
 #include "stb/stb_image.hpp"
 #include "settings.hpp"
+#include "dataCollection.hpp"
+#include "texture.hpp"
+#include "model.hpp"
 
 class Interface {
 public:
     Interface(GLFWwindow* window);
     ~Interface();
 
-    void Render(unsigned int& tex);
+    void NewFrame();
+    void Render();
+    void RenderSettingsWindow();
+    void RenderTextureList(unsigned int& tex, DataCollection<Texture>* textureAtlas);
+    void RenderModelList(unsigned int& tex, DataCollection<Texture>* textureAtlas, DataCollection<Model>* blockModels);
 
 private:
-    void NewFrame();
-    void RenderSettingsWindow();
-    void RenderTextureList(unsigned int& tex);
 
+    int selectedTextureIndex = -1;
     bool showSettingsWindow = true;
     bool showTextureList = true;
 

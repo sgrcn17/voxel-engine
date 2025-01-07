@@ -47,7 +47,7 @@ public:
 
     const T& operator[](int idx) const { return data[idx]; }
     T& operator[](int idx) { return data[idx]; }
-    int size() const { return data.size(); }
+    size_t size() const { return data.size(); }
 
 private:
     std::string path;

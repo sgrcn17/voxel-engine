@@ -1,9 +1,49 @@
 [
     {
         "id": 0,
-        "name": "grass",
+        "name": "air",
+        "position": {
+            "x": 31,
+            "y": 31
+        }
+    },
+    {
+        "id": 1,
+        "name": "dirt",
         "position": {
             "x": 0,
+            "y": 6
+        }
+    },
+    {
+        "id": 2,
+        "name": "dirt",
+        "position": {
+            "x": 0,
+            "y": 3
+        }
+    },
+    {
+        "id": 3,
+        "name": "dirt",
+        "position": {
+            "x": 3,
+            "y": 0
+        }
+    },
+    {
+        "id": 4,
+        "name": "dirt",
+        "position": {
+            "x": 4,
+            "y": 0
+        }
+    },
+    {
+        "id": 5,
+        "name": "dirt",
+        "position": {
+            "x": 5,
             "y": 0
         }
     }
