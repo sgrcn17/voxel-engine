@@ -13,6 +13,7 @@ class Camera {
     void Rotate(float xoffset, float yoffset, float deltaTime);
     void Move(GLFWwindow* window , float deltaTime);
     glm::mat4 GetViewMatrix();
+    glm::vec3 GetPosition() { return position; }
 
     private:
     void UpdateVectors();

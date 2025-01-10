@@ -1,7 +1,7 @@
 #include "camera.hpp"
 
 Camera::Camera()  {
-    position = glm::vec3(0.0f, 0.0f, 3.0f);
+    position = glm::vec3(0.0f, 264.0f, 0.0f);
     target = glm::vec3(0.0f, 0.0f, 0.0f);
     UpdateVectors();
 }

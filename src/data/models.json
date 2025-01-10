@@ -13,7 +13,7 @@
     },
     {
         "id": 1,
-        "name": "dirt",
+        "name": "grass",
         "textures": {
             "bottom": 1,
             "east": 1,
@@ -21,6 +21,30 @@
             "south": 1,
             "top": 1,
             "west": 1
+        }
+    },
+    {
+        "id": 2,
+        "name": "grass",
+        "textures": {
+            "bottom": 1,
+            "east": 2,
+            "north": 2,
+            "south": 2,
+            "top": 3,
+            "west": 2
+        }
+    },
+    {
+        "id": 3,
+        "name": "stone",
+        "textures": {
+            "bottom": 4,
+            "east": 4,
+            "north": 4,
+            "south": 4,
+            "top": 4,
+            "west": 4
         }
     }
 ]

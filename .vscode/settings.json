@@ -88,5 +88,11 @@
     },
     "C_Cpp.errorSquiggles": "disabled",
     "cmake.sourceDirectory": "C:/Kodowanie i Pierdoly/projects/voxel-engine/include/glm",
-    "cmake.ignoreCMakeListsMissing": true
+    "cmake.ignoreCMakeListsMissing": true,
+    "files.exclude": {
+        "**/*.rpyc": true,
+        "**/*.rpa": true,
+        "**/*.rpymc": true,
+        "**/cache/": true
+    }
 }

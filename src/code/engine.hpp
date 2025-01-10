@@ -24,6 +24,8 @@
 #include "input.hpp"
 #include "renderer.hpp"
 #include "model.hpp"
+#include "chunk.hpp"
+#include "world.hpp"
 
 class Engine {
 
@@ -39,6 +41,7 @@ public:
     static Camera* GetCamera() { return camera; }
     static GLFWwindow* GetWindow() { return window->GetWindow(); }
     static DataCollection<Texture>* GetTextureAtlas() { return textureAtlas; }
+    static DataCollection<Model>* GetBlockModels() { return blockModels; }
 
 private:
     static double lastFrame, deltaTime;
@@ -50,4 +53,5 @@ private:
     static Camera* camera;
     static DataCollection<Texture>* textureAtlas;
     static DataCollection<Model>* blockModels;
+    static World* world;
 };

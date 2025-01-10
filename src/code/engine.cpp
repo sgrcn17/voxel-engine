@@ -7,23 +7,28 @@ Interface* Engine::interface = nullptr;
 Camera* Engine::camera = nullptr;
 DataCollection<Texture>* Engine::textureAtlas = nullptr;
 DataCollection<Model>* Engine::blockModels = nullptr;
+World* Engine::world = nullptr;
 
 double Engine::lastFrame = 0.0d, Engine::deltaTime = 0.0d;
 
 void Engine::Initialize() {
     glfwInit();
-    window = new Window(SETTINGS::SCR_WIDTH, SETTINGS::SCR_HEIGHT, "Voxel-Engine");
-    input = new Input(window->GetWindow());
-    renderer = new Renderer();
-    interface = new Interface(window->GetWindow());
+
     textureAtlas = new DataCollection<Texture>("./../src/data/textures.json");
     blockModels = new DataCollection<Model>("./../src/data/models.json");
+    textureAtlas->LoadData();
+    blockModels->LoadData();
+
+    window = new Window(SETTINGS::SCR_WIDTH, SETTINGS::SCR_HEIGHT, "Voxel-Engine");
+    input = new Input(window->GetWindow());
+    interface = new Interface(window->GetWindow());
     camera = new Camera();
 
     glEnable(GL_DEPTH_TEST);
 
-    textureAtlas->LoadData();
-    blockModels->LoadData();
+    renderer = new Renderer();
+    world = new World();
+    world->Generate();
 }
 
 void Engine::Update() {
@@ -34,7 +39,10 @@ void Engine::Update() {
     glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+    world->Update();
+
     renderer->Render();
+    world->Render();
     
     interface->NewFrame();
     interface->RenderSettingsWindow();
@@ -52,6 +60,15 @@ void Engine::Update() {
 void Engine::Terminate() {
     textureAtlas->SaveData();
     blockModels->SaveData();
+
+    delete window;
+    delete input;
+    delete renderer;
+    delete interface;
+    delete camera;
+    delete textureAtlas;
+    delete blockModels;
+    delete world;
 
     glfwTerminate();
 }

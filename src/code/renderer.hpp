@@ -11,6 +11,7 @@
 #include "ebo.hpp"
 #include "shader.hpp"
 #include "stb/stb_image.hpp"
+#include "Chunk.hpp"
 
 class Renderer {
 public:
@@ -20,9 +21,6 @@ public:
     unsigned int& GetTexture() { return texture; }
 
 private:
-    VAO* vao;
-    VBO* vbo;
-    EBO* ebo;
     Shader* shader;
 
     unsigned int texture;
