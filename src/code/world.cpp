@@ -29,16 +29,16 @@ void World::CreateChunk(int x, int z) {
 }
 
 void World::Render() {
-   for(auto& x : chunks) {
-       for(auto& z : x.second) {
+    for(auto& x : chunks) {
+        for(auto& z : x.second) {
            z.second->Render();
-       }
-   }
+        }
+    }
 }
 
 void World::Generate() {
-    for(int i = 0; i < 15 ; i++) {
-        for(int j = 0; j < 15 ; j++) {
+    for(int i = 0; i < 8 ; i++) {
+        for(int j = 0; j < 8 ; j++) {
             CreateChunk(i, j);
         }
     }

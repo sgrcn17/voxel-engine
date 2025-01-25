@@ -39,10 +39,10 @@ void Engine::Update() {
     glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    world->Update();
+    if(world) world->Update();
 
     renderer->Render();
-    world->Render();
+    if(world) world->Render();
     
     interface->NewFrame();
     interface->RenderSettingsWindow();
@@ -75,10 +75,13 @@ void Engine::Terminate() {
 
 void Engine::Run()
 {
-    Initialize();
-    while(!glfwWindowShouldClose(window->GetWindow()))
-    {
-        Update();
+    try {
+        Initialize();
+        while(!glfwWindowShouldClose(window->GetWindow())) {
+            Update();
+        }
+        Terminate();
+    } catch(const std::exception& e) {
+        std::cerr << "Exception: " << e.what() << std::endl;
     }
-    Terminate();
 }

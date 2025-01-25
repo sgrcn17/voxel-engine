@@ -2,6 +2,8 @@
 #include "engine.hpp"
 
 Chunk::Chunk(int x, int z, int data[CHUNK_SIZE][CHUNK_HEIGHT][CHUNK_SIZE]) : x(x), z(z) {
+    std::cout << "Creating chunk at (" << x << ", " << z << ")" << std::endl;
+
     for(int i = 0; i < CHUNK_SIZE; i++) {
         for(int j = 0; j < CHUNK_HEIGHT; j++) {
             for(int k = 0; k < CHUNK_SIZE; k++) {
@@ -21,9 +23,12 @@ Chunk::Chunk(int x, int z, int data[CHUNK_SIZE][CHUNK_HEIGHT][CHUNK_SIZE]) : x(x
     glEnableVertexAttribArray(1);
     vao->linkAttrib(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), (void*)(6 * sizeof(GLfloat)));
     glEnableVertexAttribArray(2);
-    
+
+    std::cout << "Updating mesh..." << std::endl;
     UpdateMesh();
+    std::cout << "Updating buffers..." << std::endl;
     UpdateBuffers();
+    std::cout << "Chunk created successfully." << std::endl;
 }
 
 void Chunk::EmplaceBlockRenderData(int i, int j, int k, std::vector<GLfloat>& _vertices, std::vector<GLuint>& _indices) {
@@ -160,6 +165,6 @@ void Chunk::RemoveBlock(int i, int j, int k) {
 
 void Chunk::Render() {
     vao->bind();
-    glDrawElements(GL_TRIANGLES, vertices.size(), GL_UNSIGNED_INT, 0);
+    glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
     vao->unbind();
 }
