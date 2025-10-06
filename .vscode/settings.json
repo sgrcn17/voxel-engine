@@ -84,15 +84,9 @@
         "span": "cpp",
         "valarray": "cpp",
         "xtree": "cpp",
-        "string_view": "cpp"
+        "string_view": "cpp",
+        "*.gitattributes": "cpp",
+        "stack": "cpp"
     },
-    "C_Cpp.errorSquiggles": "disabled",
-    "cmake.sourceDirectory": "C:/Kodowanie i Pierdoly/projects/voxel-engine/include/glm",
-    "cmake.ignoreCMakeListsMissing": true,
-    "files.exclude": {
-        "**/*.rpyc": true,
-        "**/*.rpa": true,
-        "**/*.rpymc": true,
-        "**/cache/": true
-    }
+    "C_Cpp.errorSquiggles": "disabled"
 }
