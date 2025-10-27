@@ -6,12 +6,12 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
+#include "stb/stb_image.hpp"
+
 #include "config.hpp"
 #include "shader.hpp"
 #include "camera.hpp"
-#include "stb/stb_image.hpp"
-
-#include "utils/profiler.hpp"
+#include "chunk.hpp"
 
 #include <iostream>
 
@@ -56,38 +56,7 @@ __attribute__((flatten)) int main() {
     Shader shader("C:\\Kodowanie i Pierdoly\\projects\\voxel-engine\\resources\\shaders\\vertexShader.glsl", 
 		"C:\\Kodowanie i Pierdoly\\projects\\voxel-engine\\resources\\shaders\\fragmentShader.glsl");
 
-    float vertices[] = {
-        // positions          // texture coords
-         0.5f,  0.5f, 0.0f,   1.0f, 1.0f, // top right
-         0.5f, -0.5f, 0.0f,   1.0f, 0.0f, // bottom right
-        -0.5f, -0.5f, 0.0f,   0.0f, 0.0f, // bottom left
-        -0.5f,  0.5f, 0.0f,   0.0f, 1.0f  // top left
-    };
-
-    unsigned int indices[] = {
-        0, 1, 3,
-        1, 2, 3  
-    };
-
-    unsigned int VBO, VAO, EBO;
-    glGenVertexArrays(1, &VAO);
-    glGenBuffers(1, &VBO);
-    glGenBuffers(1, &EBO);
-
-    glBindVertexArray(VAO);
-
-    glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
-
-
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
-    glEnableVertexAttribArray(0);
-
-    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
-    glEnableVertexAttribArray(1);
+    Chunk chunk;
 
     unsigned int texturemap;
 
@@ -118,7 +87,7 @@ __attribute__((flatten)) int main() {
 
     shader.use();
     shader.setInt("texturemap", 0);
-    PROFILE("EXECUTION",
+
     while (!glfwWindowShouldClose(window)) {
         float currentFrame = static_cast<float>(glfwGetTime());
         deltaTime = currentFrame - lastFrame;
@@ -135,23 +104,15 @@ __attribute__((flatten)) int main() {
         shader.use();
         shader.setInt("texture", 0);
 
-        PROFILE("CAMERA_UPDATE",
         shader.setMat4("projection", camera.Projection());
         shader.setMat4("view", camera.View());
         shader.setMat4("model", camera.Model());
-        );
 
-        glBindVertexArray(VAO);
-        PROFILE("DRAW_CALL", glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0));
+        chunk.Draw();
 
         glfwSwapBuffers(window);
         glfwPollEvents();
-    });
-    PRINT_PROFILER_STATS();
-
-    glDeleteVertexArrays(1, &VAO);
-    glDeleteBuffers(1, &VBO);
-    glDeleteBuffers(1, &EBO);
+    }
 
     glfwTerminate();
     
