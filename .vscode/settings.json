@@ -88,5 +88,6 @@
         "*.gitattributes": "cpp",
         "stack": "cpp"
     },
-    "C_Cpp.errorSquiggles": "disabled"
+    "C_Cpp.errorSquiggles": "disabled",
+    "cmake.sourceDirectory": "C:/Kodowanie i Pierdoly/projects/voxel-engine/include/glm"
 }

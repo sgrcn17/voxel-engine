@@ -7,7 +7,10 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
+#include <utility>
+
 #include "config.hpp"
+#include "world.hpp"
 
 struct Camera {
     glm::vec3 cameraPos   = glm::vec3(0.0f, 0.0f, 3.0f);
@@ -19,6 +22,8 @@ struct Camera {
     constexpr static float sensitivity = 0.1f; 
     constexpr static float cameraSpeed = 10.0f; 
     constexpr static float fov         = 45.0f;
+
+    std::pair<int, int> currentChunk = std::make_pair(0, 0);
 
     void Rotate(float xoffset, float yoffset) {
         yaw += xoffset * sensitivity;

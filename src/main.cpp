@@ -56,8 +56,6 @@ __attribute__((flatten)) int main() {
     Shader shader("C:\\Kodowanie i Pierdoly\\projects\\voxel-engine\\resources\\shaders\\vertexShader.glsl", 
 		"C:\\Kodowanie i Pierdoly\\projects\\voxel-engine\\resources\\shaders\\fragmentShader.glsl");
 
-    Chunk chunk;
-
     unsigned int texturemap;
 
     glGenTextures(1, &texturemap);
@@ -66,8 +64,8 @@ __attribute__((flatten)) int main() {
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
     int width, height, nrChannels;
     stbi_set_flip_vertically_on_load(true);
@@ -87,6 +85,8 @@ __attribute__((flatten)) int main() {
 
     shader.use();
     shader.setInt("texturemap", 0);
+
+    World::GetInstance()->UpdateChunks(0, 0);
 
     while (!glfwWindowShouldClose(window)) {
         float currentFrame = static_cast<float>(glfwGetTime());
@@ -108,7 +108,8 @@ __attribute__((flatten)) int main() {
         shader.setMat4("view", camera.View());
         shader.setMat4("model", camera.Model());
 
-        chunk.Draw();
+        World::GetInstance()->UpdateChunks(static_cast<int>(camera.cameraPos.x) / CHUNK_SIZE, static_cast<int>(camera.cameraPos.z) / CHUNK_SIZE);
+        World::GetInstance()->Render();
 
         glfwSwapBuffers(window);
         glfwPollEvents();

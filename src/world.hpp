@@ -1,26 +1,28 @@
 #pragma once
 
 #include <map>
+#include <functional>
 #include <utility>
+#include <array>
+#include <memory>
+#include <filesystem>
 
 #include "chunk.hpp"
 
 struct World {
-    Chunk& GetChunk(int x, int z) {
-        pair<int, int> key = make_pair(x, z);
-        if (chunks.find(key) == chunks.end()) {
-            GenerateChunk(x, z);
-        }
-        return chunks[key];
-    }
+    void UpdateChunks(int centerChunkX, int centerChunkZ);
+    void Render();
 
+    std::shared_ptr<Chunk> GetChunk(int x, int z);
+    int GetBlockId(int worldX, int worldY, int worldZ);
     void GenerateChunk(int chunkX, int chunkZ);
 
-    std::map<std::pair<int, int>, Chunk> chunks;
-    std::array<Chunk, WORLD_SIZE * WORLD_SIZE> loadedChunks;
+    static World* GetInstance();
+
+    private:
+    static World* instance;
+
+    std::map<std::pair<int, int>, std::shared_ptr<Chunk>> chunks;
+    std::array<std::shared_ptr<Chunk>, WORLD_SIZE * WORLD_SIZE> loadedChunks;
 };
-
-World world;
-
-void Render();
 
