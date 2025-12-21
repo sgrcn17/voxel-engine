@@ -5,7 +5,9 @@
 #include <array>
 #include <glm/glm.hpp>
 #include <glm/gtc/noise.hpp>
-#include "config.hpp"
+#include "data.hpp"
+
+struct ChunkData;
 
 inline float fractalNoise(float x, float z, int octaves = 4) {
     float value = 0.0f;
@@ -48,19 +50,26 @@ inline void GenerateHeightMap(int chunkX, int chunkZ, std::array<unsigned short,
     }
 }
 
-inline void GenerateChunkBlocks(const std::array<unsigned short, CHUNK_SIZE * CHUNK_SIZE>& heightMap, 
-                                 std::array<unsigned short, CHUNK_SIZE * CHUNK_HEIGHT * CHUNK_SIZE>& blockID) {
-    const int chunkSizeZ = CHUNK_HEIGHT * CHUNK_SIZE;
-    
+inline void GenerateChunkBlocks(int chunkX, int chunkZ, ChunkData& data) {
+    std::array<unsigned short, CHUNK_SIZE * CHUNK_SIZE> heightMap; 
+    GenerateHeightMap(chunkX, chunkZ, heightMap);
+
     for(int x = 0; x < CHUNK_SIZE; x++) {
         for(int z = 0; z < CHUNK_SIZE; z++) {
             const int terrainHeight = heightMap[x + CHUNK_SIZE * z];
             
             for(int y = 0; y < CHUNK_HEIGHT; y++) {
-                const int yOffset = CHUNK_SIZE * y;
-                const int blockIndex = x + yOffset + chunkSizeZ * z;
+                const int blockIndex = x + CHUNK_SIZE * y + CHUNK_SIZE * CHUNK_HEIGHT * z;
                 
-                blockID[blockIndex] = (y <= terrainHeight) ? 1 : 0;
+                if(y > terrainHeight) {
+                    data.blockID[blockIndex] = static_cast<unsigned short>(BlockType::Air);
+                } else if(y == terrainHeight) {
+                    data.blockID[blockIndex] = static_cast<unsigned short>(BlockType::Grass);
+                } else if(y >= terrainHeight - 3) {
+                    data.blockID[blockIndex] = static_cast<unsigned short>(BlockType::Dirt);
+                } else {
+                    data.blockID[blockIndex] = static_cast<unsigned short>(BlockType::Stone);
+                }
             }
         }
     }

@@ -5,7 +5,7 @@
 #include <string>
 #include <iostream>
 
-#include "../config.hpp"
+#include "../data.hpp"
 
 struct Profiler {
     Profiler() {

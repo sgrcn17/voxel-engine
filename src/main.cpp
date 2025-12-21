@@ -8,12 +8,14 @@
 
 #include "stb/stb_image.hpp"
 
-#include "config.hpp"
+#include "data.hpp"
 #include "shader.hpp"
 #include "camera.hpp"
 #include "chunk.hpp"
 
 #include <iostream>
+#include <chrono>
+#include <thread>
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void mouse_callback(GLFWwindow* window, double xpos, double ypos);
@@ -53,8 +55,7 @@ __attribute__((flatten)) int main() {
 
     glEnable(GL_DEPTH_TEST);
 
-    Shader shader("C:\\Kodowanie i Pierdoly\\projects\\voxel-engine\\resources\\shaders\\vertexShader.glsl", 
-		"C:\\Kodowanie i Pierdoly\\projects\\voxel-engine\\resources\\shaders\\fragmentShader.glsl");
+    Shader shader(vertexShaderPath.data(), fragmentShaderPath.data());
 
     unsigned int texturemap;
 
@@ -70,7 +71,7 @@ __attribute__((flatten)) int main() {
     int width, height, nrChannels;
     stbi_set_flip_vertically_on_load(true);
 
-    unsigned char *data = stbi_load("C:\\Kodowanie i Pierdoly\\projects\\voxel-engine\\resources\\textures\\texturemap.png", &width, &height, &nrChannels, 0);
+    unsigned char *data = stbi_load(texturemapPath.data(), &width, &height, &nrChannels, 0);
 
     if (data)
     {
@@ -86,7 +87,9 @@ __attribute__((flatten)) int main() {
     shader.use();
     shader.setInt("texturemap", 0);
 
-    World::GetInstance()->UpdateChunks(0, 0);
+    ChunkCache world;
+    Chunk::InitCache(world);
+    Chunk::ProcessChunks(world, 0, 0);
 
     while (!glfwWindowShouldClose(window)) {
         float currentFrame = static_cast<float>(glfwGetTime());
@@ -108,8 +111,7 @@ __attribute__((flatten)) int main() {
         shader.setMat4("view", camera.View());
         shader.setMat4("model", camera.Model());
 
-        World::GetInstance()->UpdateChunks(static_cast<int>(camera.cameraPos.x) / CHUNK_SIZE, static_cast<int>(camera.cameraPos.z) / CHUNK_SIZE);
-        World::GetInstance()->Render();
+        Chunk::ProcessChunks(world, static_cast<int>(camera.cameraPos.x) / CHUNK_SIZE, static_cast<int>(camera.cameraPos.z) / CHUNK_SIZE);
 
         glfwSwapBuffers(window);
         glfwPollEvents();

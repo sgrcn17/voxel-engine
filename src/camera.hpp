@@ -9,11 +9,10 @@
 
 #include <utility>
 
-#include "config.hpp"
-#include "world.hpp"
+#include "data.hpp"
 
 struct Camera {
-    glm::vec3 cameraPos   = glm::vec3(0.0f, 0.0f, 3.0f);
+    glm::vec3 cameraPos   = glm::vec3(0.0f, 110.0f, 3.0f);
     glm::vec3 cameraFront = glm::vec3(0.0f, 0.0f, -1.0f);
     glm::vec3 cameraUp    = glm::vec3(0.0f, 1.0f, 0.0f);
 
@@ -51,7 +50,7 @@ struct Camera {
     }
 
     inline glm::mat4 Projection() {
-        return glm::perspective(glm::radians(fov), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
+        return glm::perspective(glm::radians(fov), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 1000.0f);
     }
 
     inline glm::mat4 Model() {
